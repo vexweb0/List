@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cartoony Shopping List</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-image: url('https://t4.ftcdn.net/jpg/02/10/73/39/240_F_210733963_stIjhFeI7D6odexhOrdhvOW4GODS842r.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+        }
+
+        .shopping-list {
+            max-width: 400px;
+            width: 100%;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #ff6347;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #ff6347;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #e53e3e;
+        }
+
+        .list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #e0f7fa;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .list-item span {
+            color: #333;
+        }
+
+        .list-item button {
+            background-color: #f44336;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .list-item button:hover {
+            background-color: #d32f2f;
+        }
+
+        .preferences-button {
+            width: 100%;
+            padding: 10px;
+            background-color: #00bcd4;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background-color 0.3s;
+        }
+
+        .preferences-button:hover {
+            background-color: #0097a7;
+        }
+    </style>
+</head>
+<body>
+
+<div class="shopping-list">
+    <h2>Cartoony Shopping List</h2>
+
+    <div>
+        <label for="day">Day:</label>
+        <input type="text" id="day" placeholder="Enter day">
+    </div>
+
+    <div>
+        <label for="food">Food:</label>
+        <input type="text" id="food" placeholder="Enter food item">
+    </div>
+
+    <div>
+        <label for="money">Money Limit:</label>
+        <input type="number" id="money" placeholder="Enter money limit">
+    </div>
+
+    <button onclick="addItem()">Add to List</button>
+
+    <div id="list-container">
+        <!-- Shopping list items will be displayed here -->
+    </div>
+
+    <button onclick="savePreferences()" class="preferences-button">Save Preferences</button>
+</div>
+
+<script>
+    // Load preferences from localStorage
+    document.getElementById('day').value = localStorage.getItem('day') || '';
+    document.getElementById('food').value = localStorage.getItem('food') || '';
+    document.getElementById('money').value = localStorage.getItem('money') || '';
+
+    // Load shopping list items from localStorage
+    const listContainer = document.getElementById('list-container');
+    listContainer.innerHTML = localStorage.getItem('shoppingList') || '';
+
+    function addItem() {
+        const day = document.getElementById('day').value;
+        const food = document.getElementById('food').value;
+        const money = document.getElementById('money').value;
+
+        if (day && food && money) {
+            const listItem = document.createElement('div');
+            listItem.className = 'list-item';
+            listItem.innerHTML = `<span>${day} - ${food} (Limit: $${money})</span><button onclick="removeItem(this)">Remove</button>`;
+            listContainer.appendChild(listItem);
+
+            // Clear input fields
+            document.getElementById('day').value = '';
+            document.getElementById('food').value = '';
+            document.getElementById('money').value = '';
+
+            // Save shopping list to localStorage
+            localStorage.setItem('shoppingList', listContainer.innerHTML);
+        }
+    }
+
+    function removeItem(button) {
+        const listItem = button.parentElement;
+        listContainer.removeChild(listItem);
+
+        // Save updated shopping list to localStorage
+        localStorage.setItem('shoppingList', listContainer.innerHTML);
+    }
+
+    function savePreferences() {
+        const day = document.getElementById('day').value;
+        const food = document.getElementById('food').value;
+        const money = document.getElementById('money').value;
+
+        // Save preferences to localStorage
+        localStorage.setItem('day', day);
+        localStorage.setItem('food', food);
+        localStorage.setItem('money', money);
+    }
+</script>
+
+</body>
+</html>
